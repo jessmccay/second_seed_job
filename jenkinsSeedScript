@@ -1,0 +1,24 @@
+node{
+    stage('first job'){
+        jobDsl scriptText: '''pipelineJob('first_job'){
+            concurrentBuild(false)
+            triggers {
+                githubPush()
+            }
+            definition {
+                cpsScm {
+                    scm {
+                        git {
+                            branch('master')
+                            remote {
+                                github('jessmccay/new-web-service', 'ssh')
+                                credentials('new-web-service-key')
+                            }
+                        }
+                    }
+                    scriptPath('jenkins/Jenkinsfile-dev')
+                }
+            }
+        }'''
+    }
+}
